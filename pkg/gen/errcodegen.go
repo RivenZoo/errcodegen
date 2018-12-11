@@ -32,10 +32,12 @@ func (g moduleErrorCodeGenerator) GenerateModuleErrorCode(commonConfig *config.E
 	f.ImportName(commonConfig.NewErrorFuncPkg, importName)
 
 	f.Commentf("Define error code for errors from client side.")
-	g.generateModuleVariables(f, commonConfig, moduleConfig.ModuleCode, moduleConfig.ClientCodes)
+	g.generateModuleVariables(f, commonConfig, commonConfig.ClientCodePrefix,
+		moduleConfig.ModuleCode, moduleConfig.ClientCodes)
 
 	f.Commentf("Define error code for errors from server side.")
-	g.generateModuleVariables(f, commonConfig, moduleConfig.ModuleCode, moduleConfig.ServerCodes)
+	g.generateModuleVariables(f, commonConfig, commonConfig.ServerCodePrefix,
+		moduleConfig.ModuleCode, moduleConfig.ServerCodes)
 
 	err := f.Save(fixGoSuffix(moduleConfig.ModuleName))
 	if err != nil {
@@ -45,14 +47,14 @@ func (g moduleErrorCodeGenerator) GenerateModuleErrorCode(commonConfig *config.E
 }
 
 func (g moduleErrorCodeGenerator) generateModuleVariables(f *jen.File,
-	commonConfig *config.ErrCodeCommonConfig,
+	commonConfig *config.ErrCodeCommonConfig, prefix string,
 	moduleCode string, variablesConfig []config.ErrCodeVariableConfig) error {
 	importName := filepath.Base(commonConfig.NewErrorFuncPkg)
 	snip := jen.Empty()
 	for i := range variablesConfig {
 		codeConfig := &variablesConfig[i]
 		variableName := capitalizeVariableName(codeConfig.Name)
-		errCode, err := makeErrorCode(commonConfig.AppCode, commonConfig.ClientCodePrefix,
+		errCode, err := makeErrorCode(commonConfig.AppCode, prefix,
 			moduleCode, codeConfig.ErrNumber)
 		if err != nil {
 			return err
@@ -79,7 +81,7 @@ func capitalizeVariableName(name string) string {
 }
 
 func makeErrorCode(appCode, prefix, moduleCode, errNum string) (int, error) {
-	s := fmt.Sprintf("%s%s%s%s", appCode, prefix, moduleCode, errNum)
+	s := fmt.Sprintf("%s%s%s%s", prefix, appCode, moduleCode, errNum)
 	i, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
 		log.Error("parse code %s error", s)
