@@ -1,0 +1,17 @@
+PkgName = "errorcodes"
+ClientCodePrefix = "4"
+ServerCodePrefix = "5"
+AppCode = "101"
+
+[[Modules]]
+    ModuleName = "model"
+	ModuleCode = "01"
+	[[Modules.ClientCodes]]
+		Name = "CliErr01"
+		ErrNumber = "01"
+		Msg = "test error code"
+
+	[[Modules.ServerCodes]]
+		Name = "SerErr01"
+		ErrNumber = "01"
+		Msg = "test error code"
