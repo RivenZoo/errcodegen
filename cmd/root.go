@@ -46,7 +46,10 @@ var rootCmd = &cobra.Command{
 		gen.CheckConfig(cfg)
 		g := gen.NewCodeGenerator()
 		for i := range cfg.Modules {
-			g.GenerateModuleErrorCode(&cfg.ErrCodeCommonConfig, &cfg.Modules[i])
+			err := g.GenerateModuleErrorCode(&cfg.ErrCodeCommonConfig, &cfg.Modules[i])
+			if err != nil {
+				os.Exit(-1)
+			}
 		}
 	},
 }

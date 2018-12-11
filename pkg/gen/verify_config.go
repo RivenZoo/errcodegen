@@ -14,7 +14,8 @@ var (
 		ClientCodePrefix: "4",
 		ServerCodePrefix: "5",
 		AppCode:          "100",
-		NewErrorFunc:     "errors.New",
+		NewErrorFuncPkg:  "errors",
+		NewErrorFunc:     "New",
 	}
 	moduleCodePattern   = "%02d"
 	variableCodePattern = "%02d"
@@ -33,8 +34,9 @@ func PatchConfig(conf *config.ErrCodeConfig) {
 	if conf.AppCode == "" {
 		conf.AppCode = defaultErrCodeCommonConfig.AppCode
 	}
-	if conf.NewErrorFunc == "" {
+	if conf.NewErrorFunc == "" && conf.NewErrorFuncPkg == "" {
 		conf.NewErrorFunc = defaultErrCodeCommonConfig.NewErrorFunc
+		conf.NewErrorFuncPkg = defaultErrCodeCommonConfig.NewErrorFuncPkg
 	}
 	patchModules(conf.Modules)
 }

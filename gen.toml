@@ -10,6 +10,10 @@ AppCode = "101"
 		Name = "CliErr01"
 		ErrNumber = "01"
 		Msg = "test error code"
+	[[Modules.ClientCodes]]
+		Name = "CliErr02"
+		ErrNumber = "02"
+		Msg = "test error code"
 
 	[[Modules.ServerCodes]]
 		Name = "SerErr01"

@@ -11,7 +11,8 @@ type ErrCodeCommonConfig struct {
 	ClientCodePrefix string `json:"client_code_prefix"`
 	ServerCodePrefix string `json:"server_code_prefix"`
 	AppCode          string `json:"app_code"`
-	NewErrorFunc     string `json:"new_error_func"` // func like errors.New or fmt.Errorf
+	NewErrorFuncPkg  string `json:"new_error_func_pkg"` // pkg like fmt or errors
+	NewErrorFunc     string `json:"new_error_func"`     // func like `New` from errors or `Errorf` from fmt
 }
 
 type ErrCodeModuleConfig struct {
