@@ -37,10 +37,10 @@ func PatchConfig(conf *ErrCodeConfig) {
 		conf.NewErrorFunc = defaultErrCodeCommonConfig.NewErrorFunc
 		conf.NewErrorFuncPkg = defaultErrCodeCommonConfig.NewErrorFuncPkg
 	}
-	patchModules(conf.Modules)
+	PatchModules(conf.Modules)
 }
 
-func patchModules(modules []ErrCodeModuleConfig) {
+func PatchModules(modules []ErrCodeModuleConfig) {
 	lastCode := 0
 	for i := range modules {
 		if modules[i].ModuleCode == "" {
