@@ -9,7 +9,7 @@ ${target}:	${src}
 	go build -o $@ .
 
 test:
-	go test . -v
+	go test -v ./...
 
 clean:
 	-rm -f ${target}

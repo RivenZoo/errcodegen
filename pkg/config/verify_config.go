@@ -1,7 +1,6 @@
-package gen
+package config
 
 import (
-	"errcodegen/pkg/config"
 	"errcodegen/pkg/log"
 	"fmt"
 	"os"
@@ -9,7 +8,7 @@ import (
 )
 
 var (
-	defaultErrCodeCommonConfig = config.ErrCodeCommonConfig{
+	defaultErrCodeCommonConfig = ErrCodeCommonConfig{
 		PkgName:          "errorcodes",
 		ClientCodePrefix: "4",
 		ServerCodePrefix: "5",
@@ -21,7 +20,7 @@ var (
 	variableCodePattern = "%02d"
 )
 
-func PatchConfig(conf *config.ErrCodeConfig) {
+func PatchConfig(conf *ErrCodeConfig) {
 	if conf.PkgName == "" {
 		conf.PkgName = defaultErrCodeCommonConfig.PkgName
 	}
@@ -41,7 +40,7 @@ func PatchConfig(conf *config.ErrCodeConfig) {
 	patchModules(conf.Modules)
 }
 
-func patchModules(modules []config.ErrCodeModuleConfig) {
+func patchModules(modules []ErrCodeModuleConfig) {
 	lastCode := 0
 	for i := range modules {
 		if modules[i].ModuleCode == "" {
@@ -60,7 +59,7 @@ func patchModules(modules []config.ErrCodeModuleConfig) {
 	}
 }
 
-func patchCodeVariables(codes []config.ErrCodeVariableConfig) {
+func patchCodeVariables(codes []ErrCodeVariableConfig) {
 	lastNum := 0
 	for i := range codes {
 		if codes[i].ErrNumber == "" {
@@ -77,7 +76,7 @@ func patchCodeVariables(codes []config.ErrCodeVariableConfig) {
 	}
 }
 
-func CheckConfig(conf *config.ErrCodeConfig) {
+func CheckConfig(conf *ErrCodeConfig) {
 	if conf.ClientCodePrefix == "" || conf.ServerCodePrefix == "" || conf.AppCode == "" || conf.NewErrorFunc == "" {
 		log.Error("wrong config %v", conf)
 		os.Exit(-1)
@@ -89,31 +88,45 @@ func CheckConfig(conf *config.ErrCodeConfig) {
 	checkModules(conf.Modules)
 }
 
-func checkModules(modules []config.ErrCodeModuleConfig) {
+func checkModules(modules []ErrCodeModuleConfig) {
+	existsModule := map[string]struct{}{}
+	existsVariables := map[string]struct{}{}
+
 	lastCode := modules[0].ModuleCode
 	for i := range modules {
 		if modules[i].ModuleName == "" {
 			log.Error("no module name")
 			os.Exit(-1)
 		}
+		if _, ok := existsModule[modules[i].ModuleName]; ok {
+			log.Error("module %s already exist", modules[i].ModuleName)
+			os.Exit(-1)
+		}
+		existsModule[modules[i].ModuleName] = struct{}{}
+
 		if i > 0 && modules[i].ModuleCode <= lastCode {
 			log.Error("module %v code less than last one", modules[i])
 			os.Exit(-1)
 		}
 		lastCode = modules[i].ModuleCode
-		checkVariableCodes(modules[i].ClientCodes)
-		checkVariableCodes(modules[i].ServerCodes)
-
+		checkVariableCodes(modules[i].ClientCodes, existsVariables)
+		checkVariableCodes(modules[i].ServerCodes, existsVariables)
 	}
 }
 
-func checkVariableCodes(codes []config.ErrCodeVariableConfig) {
+func checkVariableCodes(codes []ErrCodeVariableConfig, existsVariables map[string]struct{}) {
 	lastCode := codes[0].ErrNumber
 	for i := range codes {
 		if codes[i].Name == "" {
 			log.Error("no variable name")
 			os.Exit(-1)
 		}
+		if _, ok := existsVariables[codes[i].Name]; ok {
+			log.Error("variable %s already exist", codes[i].Name)
+			os.Exit(-1)
+		}
+		existsVariables[codes[i].Name] = struct{}{}
+
 		if i > 0 && codes[i].ErrNumber <= lastCode {
 			log.Error("variable %v code less than last one", codes[i])
 			os.Exit(-1)

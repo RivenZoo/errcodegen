@@ -42,8 +42,8 @@ var rootCmd = &cobra.Command{
 		}
 		config.MustInit(cfgFile)
 		cfg := config.GetConfig()
-		gen.PatchConfig(cfg)
-		gen.CheckConfig(cfg)
+		config.PatchConfig(cfg)
+		config.CheckConfig(cfg)
 		g := gen.NewCodeGenerator()
 		for i := range cfg.Modules {
 			err := g.GenerateModuleErrorCode(&cfg.ErrCodeCommonConfig, &cfg.Modules[i])
