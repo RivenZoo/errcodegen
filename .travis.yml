@@ -3,10 +3,10 @@ go:
 - 1.11.x
 
 before_install:
-
+- go mod download
 jobs:
   include:
   - stage: test
-    script: go test -v ./...
+    script: make test
   - stage: build
-    script: go build .
+    script: make
