@@ -3,7 +3,7 @@ go:
 - 1.11.x
 
 before_install:
-- go mod download
+
 jobs:
   include:
   - stage: test
