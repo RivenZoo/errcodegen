@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/RivenZoo/errcodegen/pkg/log"
 	"fmt"
+	"github.com/RivenZoo/errcodegen/pkg/log"
 	"os"
 	"strconv"
 )
@@ -89,6 +89,9 @@ func CheckConfig(conf *ErrCodeConfig) {
 }
 
 func checkModules(modules []ErrCodeModuleConfig) {
+	if len(modules) <= 0 {
+		return
+	}
 	existsModule := map[string]struct{}{}
 	existsVariables := map[string]struct{}{}
 
@@ -115,6 +118,9 @@ func checkModules(modules []ErrCodeModuleConfig) {
 }
 
 func checkVariableCodes(codes []ErrCodeVariableConfig, existsVariables map[string]struct{}) {
+	if len(codes) <= 0 {
+		return
+	}
 	lastCode := codes[0].ErrNumber
 	for i := range codes {
 		if codes[i].Name == "" {
