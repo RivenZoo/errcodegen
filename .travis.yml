@@ -7,6 +7,6 @@ before_install:
 jobs:
   include:
   - stage: test
-    script: make test
+    script: go test -v ./...
   - stage: build
-    script: make
+    script: go build .
