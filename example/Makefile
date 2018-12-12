@@ -4,7 +4,11 @@ conf = $(shell find . -name 'error_code_def.*')
 modules = example_module
 target := $(foreach n,$(modules),$(n)_gen.go)
 
-gen: target
+gen: $(target)
 
-target: $(conf)
+$(target): $(conf)
 	go generate error_code_def.go
+
+clean:
+	-rm $(target) 
+	-rm *_gen.go
