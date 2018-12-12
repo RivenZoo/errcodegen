@@ -18,6 +18,7 @@ import (
 	"errcodegen/pkg/config"
 	"errcodegen/pkg/gen"
 	"errcodegen/pkg/log"
+	"errcodegen/pkg/patch"
 	"fmt"
 	"os"
 
@@ -27,6 +28,7 @@ import (
 )
 
 var cfgFile string
+var commonConfig config.ErrCodeCommonConfig
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -36,12 +38,16 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		if cfgFile == "" {
-			log.Error("no config file")
+		if cfgFile != "" {
+			config.MustInit(cfgFile)
+		}
+		cfg := config.GetConfig()
+		err := patchCommonConfig(cfg)
+		if err != nil {
+			log.Error("patchCommonConfig error %v", err)
 			os.Exit(-1)
 		}
-		config.MustInit(cfgFile)
-		cfg := config.GetConfig()
+
 		config.PatchConfig(cfg)
 		config.CheckConfig(cfg)
 		g := gen.NewCodeGenerator()
@@ -52,6 +58,10 @@ var rootCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+func patchCommonConfig(cfg *config.ErrCodeConfig) error {
+	return patch.CoverStructsField(commonConfig, &cfg.ErrCodeCommonConfig)
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -73,7 +83,10 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().StringVar(&commonConfig.PkgName, "pkg", "errorcodes", "Generated module package name")
+	rootCmd.Flags().StringVar(&commonConfig.AppCode, "appcode", "100", "App error code, three digits")
+	rootCmd.Flags().StringVar(&commonConfig.NewErrorFuncPkg, "err_func_pkg", "errors", "New error function package import path")
+	rootCmd.Flags().StringVar(&commonConfig.NewErrorFunc, "err_func", "New", "New error function name")
 }
 
 // initConfig reads in config file and ENV variables if set.
