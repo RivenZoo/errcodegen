@@ -15,11 +15,12 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/RivenZoo/errcodegen/pkg/config"
+	"github.com/RivenZoo/errcodegen/pkg/errcode_def"
 	"github.com/RivenZoo/errcodegen/pkg/gen"
 	"github.com/RivenZoo/errcodegen/pkg/log"
 	"github.com/RivenZoo/errcodegen/pkg/patch"
-	"fmt"
 	"os"
 
 	"github.com/mitchellh/go-homedir"
@@ -29,6 +30,7 @@ import (
 
 var cfgFile string
 var commonConfig config.ErrCodeCommonConfig
+var errorCodeDefineFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -46,6 +48,22 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			log.Error("patchCommonConfig error %v", err)
 			os.Exit(-1)
+		}
+		if errorCodeDefineFile != "" {
+			func() {
+				f, err := os.Open(errorCodeDefineFile)
+				if err != nil {
+					log.Error("error code define file %s not exists", errorCodeDefineFile)
+					os.Exit(-1)
+				}
+				p := errcode_def.NewModuleErrorCodeParser()
+				modules, err := p.ParseErrorCodeDefinition(f)
+				if err != nil {
+					log.Error("parse error code define file error %v", err)
+					os.Exit(-1)
+				}
+				cfg.Modules = append(cfg.Modules, modules...)
+			}()
 		}
 
 		config.PatchConfig(cfg)
@@ -87,6 +105,7 @@ func init() {
 	rootCmd.Flags().StringVar(&commonConfig.AppCode, "appcode", "100", "App error code, three digits")
 	rootCmd.Flags().StringVar(&commonConfig.NewErrorFuncPkg, "err_func_pkg", "errors", "New error function package import path")
 	rootCmd.Flags().StringVar(&commonConfig.NewErrorFunc, "err_func", "New", "New error function name")
+	rootCmd.Flags().StringVar(&errorCodeDefineFile, "err_def", "", "Error code definiton file")
 }
 
 // initConfig reads in config file and ENV variables if set.
