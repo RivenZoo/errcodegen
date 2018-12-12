@@ -66,7 +66,7 @@ func (c *lineScannerContext) Iterator() lineIterator {
 }
 
 func (c *lineScannerContext) Line() string {
-	return c.Line()
+	return c.iter.Line()
 }
 
 func (c *lineScannerContext) LineType() lineType {

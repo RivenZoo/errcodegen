@@ -64,7 +64,7 @@ func patchCodeVariables(codes []ErrCodeVariableConfig) {
 	for i := range codes {
 		if codes[i].ErrNumber == "" {
 			lastNum += 1
-			codes[i].ErrNumber = fmt.Sprint(variableCodePattern, lastNum)
+			codes[i].ErrNumber = fmt.Sprintf(variableCodePattern, lastNum)
 		} else {
 			i, err := strconv.ParseInt(codes[i].ErrNumber, 10, 32)
 			if err != nil {

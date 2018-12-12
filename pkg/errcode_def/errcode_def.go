@@ -74,6 +74,7 @@ func (p moduleErrorCodeParser) ParseErrorCodeDefinition(r io.Reader) ([]config.E
 		}
 		line := lctx.Line()
 		if line == "" {
+			next = true
 			continue
 		}
 		ltype := lctx.LineType()
@@ -86,6 +87,8 @@ func (p moduleErrorCodeParser) ParseErrorCodeDefinition(r io.Reader) ([]config.E
 			if len(modules) > 0 {
 				ret = append(ret, modules...)
 			}
+		} else {
+			next = true
 		}
 	}
 	if err = lctx.Iterator().Err(); err != nil {
@@ -124,6 +127,7 @@ func (p moduleErrorCodeParser) parseModuleConfig(lctx lineContext) ([]config.Err
 		}
 		line := lctx.Line()
 		if line == "" {
+			next = true
 			continue
 		}
 		ltype := lctx.LineType()
@@ -150,9 +154,10 @@ func (p moduleErrorCodeParser) parseModuleConfig(lctx lineContext) ([]config.Err
 			}
 		default:
 			// skip
+			next = true
 		}
 	}
-	return modulesConfig, true, nil
+	return modulesConfig, false, nil
 }
 
 // parseVariableConfig parse error code definition from line client_error or server_error.
@@ -170,6 +175,7 @@ func (p moduleErrorCodeParser) parseVariableConfig(lctx lineContext) ([]config.E
 		}
 		line := lctx.Line()
 		if line == "" {
+			next = true
 			continue
 		}
 		ltype := lctx.LineType()
@@ -184,9 +190,11 @@ func (p moduleErrorCodeParser) parseVariableConfig(lctx lineContext) ([]config.E
 					Msg:  v,
 				})
 			}
+		default:
+			next = true
 		}
 	}
-	return variablesConfig, true, nil
+	return variablesConfig, false, nil
 }
 
 // parseModuleArgs parse module definition [A(module_code=01)].
