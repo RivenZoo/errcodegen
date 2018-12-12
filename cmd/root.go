@@ -15,10 +15,10 @@
 package cmd
 
 import (
-	"errcodegen/pkg/config"
-	"errcodegen/pkg/gen"
-	"errcodegen/pkg/log"
-	"errcodegen/pkg/patch"
+	"github.com/RivenZoo/errcodegen/pkg/config"
+	"github.com/RivenZoo/errcodegen/pkg/gen"
+	"github.com/RivenZoo/errcodegen/pkg/log"
+	"github.com/RivenZoo/errcodegen/pkg/patch"
 	"fmt"
 	"os"
 

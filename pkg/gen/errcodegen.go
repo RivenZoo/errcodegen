@@ -1,8 +1,8 @@
 package gen
 
 import (
-	"errcodegen/pkg/config"
-	"errcodegen/pkg/log"
+	"github.com/RivenZoo/errcodegen/pkg/config"
+	"github.com/RivenZoo/errcodegen/pkg/log"
 	"fmt"
 	"github.com/dave/jennifer/jen"
 	"path/filepath"

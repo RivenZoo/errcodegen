@@ -2,7 +2,7 @@ package errcode_def
 
 import (
 	"bytes"
-	"errcodegen/pkg/config"
+	"github.com/RivenZoo/errcodegen/pkg/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

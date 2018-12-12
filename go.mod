@@ -1,4 +1,4 @@
-module errcodegen
+module github.com/RivenZoo/errcodegen
 
 require (
 	github.com/BurntSushi/toml v0.3.1

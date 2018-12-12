@@ -14,7 +14,7 @@
 
 package main
 
-import "errcodegen/cmd"
+import "github.com/RivenZoo/errcodegen/cmd"
 
 func main() {
 	cmd.Execute()

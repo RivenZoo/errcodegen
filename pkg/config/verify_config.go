@@ -1,7 +1,7 @@
 package config
 
 import (
-	"errcodegen/pkg/log"
+	"github.com/RivenZoo/errcodegen/pkg/log"
 	"fmt"
 	"os"
 	"strconv"

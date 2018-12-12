@@ -3,7 +3,7 @@ package errcode_def
 
 import (
 	"bufio"
-	"errcodegen/pkg/config"
+	"github.com/RivenZoo/errcodegen/pkg/config"
 	"fmt"
 	"io"
 	re "regexp"
