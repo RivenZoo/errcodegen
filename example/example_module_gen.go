@@ -7,10 +7,10 @@ import "fmt"
 
 // Define error code for errors from client side.
 var (
-	BadRequestErr = fmt.Errorf("%d: bad request", 41000101)
+	BadRequestErr = fmt.Errorf("%d: bad request", 41000601)
 )
 
 // Define error code for errors from server side.
 var (
-	ServerBusyErr = fmt.Errorf("%d: server busy", 51000101)
+	ServerBusyErr = fmt.Errorf("%d: server busy", 51000601)
 )

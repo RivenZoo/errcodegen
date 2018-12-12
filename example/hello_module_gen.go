@@ -7,10 +7,10 @@ import "fmt"
 
 // Define error code for errors from client side.
 var (
-	WrongParamErr = fmt.Errorf("%d: wrong param", 41000201)
+	WrongParamErr = fmt.Errorf("%d: wrong param", 41000701)
 )
 
 // Define error code for errors from server side.
 var (
-	DBErr = fmt.Errorf("%d: db error", 51000201)
+	DBErr = fmt.Errorf("%d: db error", 51000701)
 )
