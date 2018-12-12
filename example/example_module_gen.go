@@ -8,6 +8,7 @@ import "fmt"
 // Define error code for errors from client side.
 var (
 	BadRequestErr = fmt.Errorf("%d: bad request", 41000601)
+	BadParamErr   = fmt.Errorf("%d: bad param", 41000602)
 )
 
 // Define error code for errors from server side.
