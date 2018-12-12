@@ -1,5 +1,15 @@
 <a name=""></a>
-# [](https://github.com/RivenZoo/errcodegen/compare/v0.1.0...v) (2018-12-12)
+# [](https://github.com/RivenZoo/errcodegen/compare/v0.1.1...v) (2018-12-12)
+
+
+
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/RivenZoo/errcodegen/compare/v0.1.0...v0.1.1) (2018-12-12)
+
+
+### Bug Fixes
+
+* fix render import path ([484d22a](https://github.com/RivenZoo/errcodegen/commit/484d22a))
 
 
 
