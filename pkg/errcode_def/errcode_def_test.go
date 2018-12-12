@@ -9,7 +9,7 @@ import (
 
 func TestModuleErrorCodeParser_ParseErrorCodeDefinition(t *testing.T) {
 	testDefinition := []byte(`
-[moduleA(module_code=01)] # moduleA is module name; (module_code=01) is optional
+[moduleA(module_code=06)] # moduleA is module name; (module_code=01) is optional
 [[client_error]] 		  # client_error is keyword
 ErrModuleAVar1 = "error msg 1"
 ErrModuleAVar2 = "error msg 2"
@@ -22,7 +22,7 @@ ErrModuleBVar1 = "error msg 2"`)
 	expect := []config.ErrCodeModuleConfig{
 		config.ErrCodeModuleConfig{
 			ModuleName: "moduleA",
-			ModuleCode: "01",
+			ModuleCode: "06",
 			ClientCodes: []config.ErrCodeVariableConfig{
 				config.ErrCodeVariableConfig{
 					Name:      "ErrModuleAVar1",
@@ -38,7 +38,7 @@ ErrModuleBVar1 = "error msg 2"`)
 		},
 		config.ErrCodeModuleConfig{
 			ModuleName: "moduleB",
-			ModuleCode: "02",
+			ModuleCode: "07",
 			ServerCodes: []config.ErrCodeVariableConfig{
 				config.ErrCodeVariableConfig{
 					Name:      "ErrModuleBVar1",
@@ -52,4 +52,16 @@ ErrModuleBVar1 = "error msg 2"`)
 	modulesConfig, err := p.ParseErrorCodeDefinition(bytes.NewReader(testDefinition))
 	assert.Nil(t, err)
 	assert.EqualValues(t, expect, modulesConfig)
+}
+
+func TestParseModuleArgs(t *testing.T) {
+	line := "[moduleA(module_code=06)] # moduleA is module name; (module_code=01) is optional"
+	expect := config.ErrCodeModuleConfig{
+		ModuleName: "moduleA",
+		ModuleCode: "06",
+	}
+	p := moduleErrorCodeParser{}
+	name, args := p.parseModuleArgs(line)
+	assert.Equal(t, expect.ModuleName, name)
+	assert.Equal(t, expect.ModuleCode, args["module_code"])
 }

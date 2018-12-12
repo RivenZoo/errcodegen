@@ -206,7 +206,8 @@ func (p moduleErrorCodeParser) parseModuleArgs(line string) (moduleName string, 
 	}
 	moduleName = trimRawLine(matches[1])
 	if len(matches) == 3 && matches[2] != "" {
-		args = p.parseSingleArgs(matches[2])
+		s := strings.Trim(matches[2], "()")
+		args = p.parseSingleArgs(s)
 	}
 	return
 }
