@@ -11,5 +11,9 @@ ${target}:	${src}
 test:
 	go test -v ./...
 
+release:
+	gox -os="linux darwin windows" -arch="amd64" ./...
+
 clean:
 	-rm -f ${target}
+	-rm errcodegen_*_amd64*
