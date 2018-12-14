@@ -3,6 +3,7 @@ go:
 - 1.11.x
 
 before_install:
+  - go get github.com/mitchellh/gox
 
 jobs:
   include:
@@ -10,3 +11,18 @@ jobs:
     script: make test
   - stage: build
     script: make
+  - stage: deploy
+    provider: releases
+    skip_cleanup: true
+    file:
+      # The names of the binaries to output, based on the -output template passed to gox.
+      - errcodegen_windows_amd64.exe
+      - errcodegen_linux_amd64
+      - errcodegen_darwin_amd64
+    on:
+      # Only build binaries for tagged commits
+      tags: true
+      condition: $LATEST = true
+    script:
+      # Only build binaries from the latest Go release.
+      - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" ./...; fi
