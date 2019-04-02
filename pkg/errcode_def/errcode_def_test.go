@@ -9,7 +9,7 @@ import (
 
 func TestModuleErrorCodeParser_ParseErrorCodeDefinition(t *testing.T) {
 	testDefinition := []byte(`
-[moduleA(module_code=06)] # moduleA is module name; (module_code=01) is optional
+[moduleA(module_code=06 output_path=./errors)] # moduleA is module name; (module_code=01 output_path=./errors) is optional
 [[client_error]] 		  # client_error is keyword
 ErrModuleAVar1 = "error msg 1"
 ErrModuleAVar2 = "error msg 2"
@@ -21,6 +21,7 @@ ErrModuleAVar2 = "error msg 2"
 ErrModuleBVar1 = "error msg 2"`)
 	expect := []config.ErrCodeModuleConfig{
 		config.ErrCodeModuleConfig{
+			OutputPath: "./errors",
 			ModuleName: "moduleA",
 			ModuleCode: "06",
 			ClientCodes: []config.ErrCodeVariableConfig{

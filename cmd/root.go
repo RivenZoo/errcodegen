@@ -56,6 +56,8 @@ var rootCmd = &cobra.Command{
 					log.Error("error code define file %s not exists", errorCodeDefineFile)
 					os.Exit(-1)
 				}
+				defer f.Close()
+
 				p := errcode_def.NewModuleErrorCodeParser()
 				modules, err := p.ParseErrorCodeDefinition(f)
 				if err != nil {
@@ -101,7 +103,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().StringVar(&commonConfig.PkgName, "pkg", "errorcodes", "Generated module package name")
+	rootCmd.Flags().StringVar(&commonConfig.PkgName, "pkg", "errorcodes", "Generated module default package name")
 	rootCmd.Flags().StringVar(&commonConfig.AppCode, "appcode", "100", "App error code, three digits")
 	rootCmd.Flags().StringVar(&commonConfig.NewErrorFuncPkg, "err_func_pkg", "errors", "New error function package import path")
 	rootCmd.Flags().StringVar(&commonConfig.NewErrorFunc, "err_func", "New", "New error function name")

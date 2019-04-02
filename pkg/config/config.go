@@ -16,6 +16,7 @@ type ErrCodeCommonConfig struct {
 }
 
 type ErrCodeModuleConfig struct {
+	OutputPath  string                  `json:"output_path"`
 	ModuleName  string                  `json:"module_name"`
 	ModuleCode  string                  `json:"module_code"`
 	ClientCodes []ErrCodeVariableConfig `json:"client_codes"`

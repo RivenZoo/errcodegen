@@ -3,8 +3,8 @@ package errcode_def
 
 import (
 	"bufio"
-	"github.com/RivenZoo/errcodegen/pkg/config"
 	"fmt"
+	"github.com/RivenZoo/errcodegen/pkg/config"
 	"io"
 	re "regexp"
 	"strings"
@@ -23,7 +23,7 @@ type moduleErrorCodeParser struct {
 
 // ParseErrorCodeDefinition parse self defined module error code config format.
 // Format:
-// [moduleA(module_code=01)] # moduleA is module name; (module_code=01) is optional
+// [moduleA(module_code=01 output_path=./errors)] # moduleA is module name; (module_code=01 output_path=./errors) is optional
 // [[client_error]] 		 # client_error is keyword
 // ErrModuleAVar1 = "error msg"
 //
@@ -36,6 +36,7 @@ type moduleErrorCodeParser struct {
 // Return:
 // []config.ErrCodeModuleConfig{
 //	config.ErrCodeModuleConfig{
+// 		OutputPath: "./",
 //		ModuleCode: "01",
 //		ModuleName: "moduleA",
 //		ClientCodes: []config.ErrCodeVariableConfig{
@@ -47,6 +48,7 @@ type moduleErrorCodeParser struct {
 //		},
 //	},
 //	config.ErrCodeModuleConfig{
+// 		OutputPath: "",
 //		ModuleCode: "02",
 //		ModuleName: "moduleB",
 //		ClientCodes: []config.ErrCodeVariableConfig{
@@ -114,6 +116,9 @@ func (p moduleErrorCodeParser) parseModuleConfig(lctx lineContext) ([]config.Err
 	}
 	if v, ok := args["module_code"]; ok {
 		module.ModuleCode = v
+	}
+	if v, ok := args["output_path"]; ok {
+		module.OutputPath = v
 	}
 
 	var err error
@@ -207,7 +212,7 @@ func (p moduleErrorCodeParser) parseModuleArgs(line string) (moduleName string, 
 	moduleName = trimRawLine(matches[1])
 	if len(matches) == 3 && matches[2] != "" {
 		s := strings.Trim(matches[2], "()")
-		args = p.parseSingleArgs(s)
+		args = p.parseModuleOptionalArgs(s)
 	}
 	return
 }
@@ -224,6 +229,25 @@ func (p moduleErrorCodeParser) parseSingleArgs(line string) (args map[string]str
 	if k != "" && v != "" {
 		args[trimQuotation(k)] = trimQuotation(v)
 	}
+	return
+}
+
+func (p moduleErrorCodeParser) parseModuleOptionalArgs(line string) (args map[string]string) {
+	args = map[string]string{}
+
+	fields := strings.Fields(line)
+	for i := range fields {
+		kvs := strings.Split(fields[i], "=")
+		if len(kvs) != 2 {
+			return
+		}
+		k := trimRawLine(kvs[0])
+		v := trimRawLine(kvs[1])
+		if k != "" && v != "" {
+			args[trimQuotation(k)] = trimQuotation(v)
+		}
+	}
+
 	return
 }
 
