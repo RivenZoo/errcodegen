@@ -7,7 +7,7 @@ target := $(foreach n,$(modules),$(n)_gen.go)
 gen: $(target)
 
 $(target): $(conf)
-	go generate error_code_def.go
+	errcodegen --err_func=Errorf --err_func_pkg=fmt --pkg=example --err_def=error_code_def.conf
 
 clean:
 	-rm $(target) 
