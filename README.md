@@ -27,6 +27,13 @@ Flags:
       --pkg string            Generated module package name (default "errorcodes")  # generated code package name
 ```
 
+### Use docker
+
+```
+$ cd example
+$ docker run --rm -it -v $(pwd):/data/app rivenzoe/errcodegen errcodegen --err_def=error_code_def.conf --err_func=Errorf --err_func_pkg=fmt --pkg=example
+```
+
 ## Example
 
 See [example](https://github.com/RivenZoo/errcodegen/tree/master/example)
